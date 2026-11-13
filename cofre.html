@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cofre Legendario</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(ellipse at center, #344e72 0%, #18263c 50%, #090f1c 100%);
+    font-family: Arial, sans-serif;
+    color: white;
+    overflow: hidden;
+}
+
+h1 {
+    color: #ffdc76;
+    font-size: 38px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 15px #ffb000;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #c4d5e9;
+    margin-bottom: 25px;
+}
+
+.counter {
+    font-size: 75px;
+    font-weight: 900;
+    color: #ffe28a;
+    text-shadow: 0 0 20px #ffb300;
+    margin-bottom: 45px;
+}
+
+.chest {
+    position: relative;
+    width: 260px;
+    height: 205px;
+    cursor: pointer;
+    transition: transform .2s;
+    filter: drop-shadow(0 20px 20px #000b);
+    animation: floating 3s ease-in-out infinite;
+}
+
+.chest:hover {
+    transform: scale(1.07);
+}
+
+.chest:active {
+    transform: scale(.94);
+}
+
+@keyframes floating {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -9px; }
+}
+
+.lid {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 250px;
+    height: 85px;
+    border: 7px solid #60330e;
+    border-radius: 65px 65px 12px 12px;
+    background: linear-gradient(
+        180deg,
+        #ffe69a,
+        #e9a839 45%,
+        #a85c16
+    );
+    box-shadow: inset 0 7px 10px #fff5;
+    z-index: 3;
+}
+
+.lid::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: 20px;
+    width: 195px;
+    height: 12px;
+    background: #fff8c4;
+    border-radius: 50%;
+    opacity: .6;
+}
+
+.chest-body {
+    position: absolute;
+    bottom: 0;
+    width: 260px;
+    height: 140px;
+    border: 8px solid #60330e;
+    border-radius: 12px 12px 25px 25px;
+    background: linear-gradient(
+        90deg,
+        #85400e,
+        #eaa33d 25%,
+        #ffcf62 50%,
+        #d78b29 75%,
+        #81400e
+    );
+    overflow: hidden;
+}
+
+.chest-body::before,
+.chest-body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 13px;
+    height: 100%;
+    background: #ffe18a;
+    border-left: 3px solid #875015;
+    border-right: 3px solid #875015;
+}
+
+.chest-body::before { left: 24px; }
+.chest-body::after { right: 24px; }
+
+.middle-band {
+    position: absolute;
+    top: 5px;
+    left: 109px;
+    width: 42px;
+    height: 195px;
+    background: linear-gradient(90deg, #9a671c, #ffe28a, #b47b20);
+    border: 4px solid #70400e;
+    z-index: 4;
+}
+
+.lock {
+    position: absolute;
+    top: 95px;
+    left: 100px;
+    width: 60px;
+    height: 62px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #fff0a5, #d79a2d);
+    border: 5px solid #71420e;
+    z-index: 5;
+    box-shadow: 0 3px 8px #0008;
+}
+
+.lock::after {
+    content: "★";
+    position: absolute;
+    color: #85500d;
+    font-size: 30px;
+    left: 12px;
+    top: 8px;
+}
+
+.chest.open .lid {
+    transform: translateY(-35px) rotate(-12deg);
+    transform-origin: left bottom;
+    transition: .25s;
+}
+
+.chest.open .lock {
+    opacity: 0;
+    transition: .2s;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 45px;
+}
+
+button {
+    border: none;
+    padding: 15px 28px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    transform: scale(1.06);
+}
+
+.reset {
+    color: white;
+    background: linear-gradient(135deg, #a83232, #e74c3c);
+    box-shadow: 0 5px 15px #e74c3c55;
+}
+
+.reset:active {
+    transform: scale(.95);
+}
+
+.instruction {
+    margin-top: 22px;
+    color: #c6d6e9;
+    font-size: 14px;
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow: 0 0 10px #ffc400; }
+    50% { text-shadow: 0 0 30px #fff0a0; }
+}
+
+.counter {
+    animation: glow 2s infinite;
+}
+</style>
+</head>
+
+<body>
+
+<h1>COFRE LEGENDARIO</h1>
+<p class="subtitle">¿Cuántas veces puedes abrirlo?</p>
+
+<div class="counter" id="counter">0</div>
+
+<div class="chest" id="chest" onclick="clickChest()">
+    <div class="lid"></div>
+    <div class="chest-body"></div>
+    <div class="middle-band"></div>
+    <div class="lock"></div>
+</div>
+
+<div class="buttons">
+    <button class="reset" onclick="resetCounter()">
+        ↻ REINICIAR
+    </button>
+</div>
+
+<p class="instruction">Haz clic sobre el cofre para sumar +1</p>
+
+<script>
+let clicks = Number(localStorage.getItem("clicks")) || 0;
+
+const counter = document.getElementById("counter");
+const chest = document.getElementById("chest");
+
+function updateCounter() {
+    counter.textContent = clicks.toLocaleString("es-ES");
+}
+
+function clickChest() {
+    clicks++;
+
+    localStorage.setItem("clicks", clicks);
+    updateCounter();
+
+    chest.classList.add("open");
+
+    setTimeout(() => {
+        chest.classList.remove("open");
+    }, 250);
+}
+
+function resetCounter() {
+    if (confirm("¿Seguro que quieres reiniciar el contador?")) {
+        clicks = 0;
+        localStorage.setItem("clicks", 0);
+        updateCounter();
+    }
+}
+
+updateCounter();
+</script>
+
+</body>
+</html>
